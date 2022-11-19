@@ -1,26 +1,182 @@
 <!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles/style.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" />
-    <title>Frodo el perro</title>
-  </head>
-  <body>
-
-    <h1>La foto de frodo</h1>
+<html>
+  
+<head>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.js"
+    integrity="sha512-BbVEDjbqdN3Eow8+empLMrJlxXRj5nEitiCAK5A1pUr66+jLVejo3PmjIaucRnjlB0P9R3rBUs3g5jXc8ti+fQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script> 
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"
+    integrity="sha512-SGWgwwRA8xZgEoKiex3UubkSkV1zSE1BS6O4pXcaxcNtUlQsOmOmhVnDwIvqGRfEmuz83tIGL13cXMZn6upPyg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+<!-- for styling -->
+  <style>
+    table {
+      border: 1px solid black;
+      margin-left: auto;
+      margin-right: auto;
+    }
     
-    <img src="images/image1.jpg" alt="My test image" width="540">
+    input[type=button] {
+      width: 100%;
+      padding: 20px 40px;
+      background-color: green;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+    }
+    #result {
+      text-align: center;
+      height: 50px;
+      padding: 20px 40px;
+      font-size: 24px;
+      font-weight: bold;
+      border: 5px solid black;
+    }
+    #Diana {
+      text-align: center;
+      width: 100%;
+      padding: 20px 40px;
+      background-color: blue;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
 
-    <p>Frodo, tambien conocido como</p>
+<body>
+  <p id="contador"></p>
+  <table id="calcu">
+    <tr>
+      <td colspan = "8" id="Diana"></td>
+    </tr>
+    <tr>
+      <td colspan="8" id="result"></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input id="value1" class="numeros" type="button" onclick="dis(this)"></td>
+      <td colspan="2"><input id="value2" class="numeros" type="button" onclick="dis(this)"></td>
+      <td colspan="2"><input id="value3" class="numeros" type="button" onclick="dis(this)"></td>
+      <td colspan="2"><input id="value4" class="numeros" type="button" onclick="dis(this)"></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input id="suma" type="button" value="+" onclick="dis(this)"></td>
+      <td colspan="2"><input id="resta" type="button" value="-" onclick="dis(this)"></td>
+      <td colspan="2"><input id="multiplicacion" type="button" value="*" onclick="dis(this)"></td>
+      <td colspan="2"><input id="division" type="button" value="/" onclick="dis(this)"></td>
+    </tr>
+  </table>
+  <button type="button" id="empezar" onclick='empezar()'>EMPEZAR</button>
+  <button type="button" onclick='clr()'>BORRAR</button>
+  <script>
+    var numeros;
+    var resultados;
+    var operaciones;
+    let contador = 1;
+    let Diana = 1
+    let numero_botones = 0
+    parse()
+    
+    function parse() {
+      /*
+      var  numeros_data = document.getElementById('numeros_csv').files[0];
+      var  resultados_data = document.getElementById('resultados_csv').files[0];
+      var  operaciones_data = document.getElementById('operaciones_csv').files[0];
+      */
 
-    <ul>
-      <li>camioncito</li>
-      <li>señor</li>
-      <li>dormilón</li>
-    </ul>
-    <p>sigue durmiendo...</p>
-    <!--<a href="https://www.mozilla.org/en-US/about/manifesto/">Mozilla Manifesto</a>-->
-    <script src="scripts/main.js"></script>
-  </body>
+      Papa.parse("https://raw.githubusercontent.com/punto-sh/punto-sh.github.io/diana/numeros.csv", {
+        download: true,
+        header: false,
+        dynamicTyping: true,
+        complete: function(results) {
+          numeros = results.data;
+        }
+      });
+      Papa.parse("https://raw.githubusercontent.com/punto-sh/punto-sh.github.io/diana/resultados.csv", {
+        download: true,
+        header: false,
+        dynamicTyping: true,
+        complete: function(results) {
+          resultados = results.data;
+        }
+      });
+      Papa.parse("https://raw.githubusercontent.com/punto-sh/punto-sh.github.io/diana/operaciones.csv", {
+        download: true,
+        header: false,
+        dynamicTyping: true,
+        complete: function(results) {
+          operaciones = results.data;
+        }
+      });
+    }
+
+    function empezar() {
+      contador = 0
+      largo = numeros.length;
+      var juego = Math.floor(Math.random()*largo);
+      console.log("Numero de juego: ", juego)
+      // Cambiar los valores
+      document.getElementById("contador").innerHTML = "Diana numero: ".concat(Diana);
+      document.getElementById('value1').value = numeros[juego][0];
+      document.getElementById('value2').value = numeros[juego][1];
+      document.getElementById('value3').value = numeros[juego][2];
+      document.getElementById('value4').value = numeros[juego][3];
+      document.getElementById('Diana').innerHTML = resultados[juego];
+      document.getElementById('result').innerHTML = ""
+      var spanElements = document.querySelectorAll('input[type=button]');
+      for (var i = 0; i < spanElements.length; i++) {
+        spanElements[i].style.background = 'green';
+        spanElements[i].disabled = false;
+      }
+      Diana += 1
+    }
+    // Function that display value
+    function dis(name) {
+      document.getElementById("result").innerHTML += name.value;
+      if (name.className == 'numeros') {
+        numero_botones += 1
+        name.style.background= "red";
+        name.disabled = true
+        solve()
+        if (document.getElementById("result").innerHTML == document.getElementById('Diana').innerHTML && numero_botones == 4) {
+          empezar()
+        }
+      }
+    }
+
+       
+    // Function that evaluates the digit and return result
+    function solve() {
+      let x = document.getElementById("result").innerHTML
+      let y = math.evaluate(x)
+      document.getElementById("result").innerHTML = y
+    }
+  
+    // Function that clear the display
+    function clr() {
+      var spanElements = document.querySelectorAll('input[type=button]');
+      console.log(contador)
+      document.getElementById("result").innerHTML = "";
+      for (var i = 0; i < spanElements.length; i++) {
+        spanElements[i].style.background = 'green';
+      }
+      contador += 1
+      if (contador >= 4) {
+        document.getElementById("result").innerHTML = "PERDISTE";
+        document.getElementById("empezar").innerHTML = "INTENTALO DE NUEVO"
+        Diana = 1
+        document.getElementById("contador").innerHTML = "";
+      }
+    }
+
+  </script>
+</body>
 </html>
